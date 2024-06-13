@@ -51,7 +51,7 @@ public class World : IWorld<int>
         if (components.TryGetValue(typeof(T), out var array)) storage = (ComponentWithFlag<T>[])array;
         else components[typeof(T)] = storage = new ComponentWithFlag<T>[isAlive.Length];
         
-        if (storage[entityId].flag) throw new Exception($"Entity {entityId} already has Component1");
+        if (storage[entityId].flag) throw new Exception($"Entity {entityId} already has {typeof(T)}");
         storage[entityId] = new ComponentWithFlag<T> { flag = true, component = c };
     }
 
@@ -62,7 +62,7 @@ public class World : IWorld<int>
         if (components.TryGetValue(typeof(T), out var array)) storage = (ComponentWithFlag<T>[])array;
         else components[typeof(T)] = storage = new ComponentWithFlag<T>[isAlive.Length];
         
-        if (!storage[entityId].flag) throw new Exception($"Entity {entityId} has no Component1");
+        if (!storage[entityId].flag) throw new Exception($"Entity {entityId} has no {typeof(T)}");
         return ref storage[entityId].component;
     }
 
@@ -73,7 +73,7 @@ public class World : IWorld<int>
         if (components.TryGetValue(typeof(T), out var array)) storage = (ComponentWithFlag<T>[])array;
         else components[typeof(T)] = storage = new ComponentWithFlag<T>[isAlive.Length];
 
-        if (!storage[entityId].flag) throw new Exception($"Entity {entityId} has no Component1");
+        if (!storage[entityId].flag) throw new Exception($"Entity {entityId} has no {typeof(T)}");
         storage[entityId].flag = false;
         freeEntityIds.Enqueue(entityId);
     }
