@@ -1,27 +1,44 @@
-﻿namespace ecs1;
+﻿using System.Runtime.InteropServices;
 
-public readonly struct Entity
+namespace ecs1;
+
+[StructLayout(LayoutKind.Sequential)]
+public readonly struct EntityId : IEquatable<EntityId>
 {
-    public readonly int id;
-    public readonly ushort gen;
+    public static readonly EntityId Invalid = new(0, 0, 0);
     
-    public Entity(int id, ushort gen)
+    internal readonly int id;
+    internal readonly ushort gen;
+    internal readonly ushort worldId; // [!code ++]
+    
+    public EntityId(int id, ushort gen, ushort worldId)
     {
         this.id = id;
         this.gen = gen;
+        this.worldId = worldId;
     }
     
-    public override string ToString() => $"e {id}[{gen}]";
+    public bool Equals(EntityId other) => id == other.id && gen == other.gen && worldId == other.worldId;
+
+    public override bool Equals(object? obj) => obj is EntityId other && Equals(other);
+    public override int GetHashCode() => HashCode.Combine(id, gen);
+    public override string ToString() => $"E:{worldId}-{id}[{gen}]";
+    public static bool operator ==(EntityId a, EntityId b) => a.Equals(b);
+    public static bool operator !=(EntityId a, EntityId b) => !a.Equals(b);
 }
 
-public class World : IWorld<Entity>
+public class World : IWorld<EntityId>
 {
+    private static ushort worldsCounter = 0;
+    private static ushort Id => ++worldsCounter;
+    
     private struct ComponentWithFlag<T>
     {
         public bool flag;
         public T component;
     }
 
+    private readonly ushort id = Id;
     private readonly Queue<int> freeEntityIds = new();
     private readonly Dictionary<Type, Array> components = new();
     
@@ -47,23 +64,28 @@ public class World : IWorld<Entity>
     }
 
     // CRUD [C]reate :: world
-    public Entity CreateEntity()
+    public EntityId CreateEntity()
     {
         if (freeEntityIds.Count == 0) Resize(gen.Length + 32);
         var entityId = freeEntityIds.Dequeue();
-        return new Entity(entityId, gen[entityId]);
+        return new EntityId(entityId, gen[entityId], id);
     }
 
     // CRUD [D]elete :: world
-    public void DeleteEntity(in Entity entity)
+    public void DeleteEntity(in EntityId entity)
     {
+        if (entity.worldId != id) throw new Exception($"Entity {entity} not belongs to world {this}!");
         if (gen[entity.id] != entity.gen) throw new Exception($"Entity {entity} is dead!");
-        gen[entity.id]++;
+        unchecked
+        {
+            gen[entity.id]++;
+        }
     }
 
     // CRUD [C]reate :: entity
-    public void AddComponent<T>(in Entity entity, in T c)
+    public void AddComponent<T>(in EntityId entity, in T c)
     {
+        if (entity.worldId != id) throw new Exception($"Entity {entity} not belongs to world {this}!");
         if (gen[entity.id] != entity.gen) throw new Exception($"Entity {entity} is dead!");
         
         ComponentWithFlag<T>[] storage;
@@ -75,8 +97,9 @@ public class World : IWorld<Entity>
     }
 
     // CRUD [R]ead/[U]pdate :: entity
-    public ref T GetComponent<T>(in Entity entity)
+    public ref T GetComponent<T>(in EntityId entity)
     {
+        if (entity.worldId != id) throw new Exception($"Entity {entity} not belongs to world {this}!");
         if (gen[entity.id] != entity.gen) throw new Exception($"Entity {entity} is dead!");
 
         ComponentWithFlag<T>[] storage;
@@ -88,8 +111,9 @@ public class World : IWorld<Entity>
     }
 
     // CRUD [D]elete :: entity
-    public void DeleteComponent<T>(in Entity entity)
+    public void DeleteComponent<T>(in EntityId entity)
     {
+        if (entity.worldId != id) throw new Exception($"Entity {entity} not belongs to world {this}!");
         if (gen[entity.id] != entity.gen) throw new Exception($"Entity {entity} is dead!");
 
         ComponentWithFlag<T>[] storage;
@@ -100,4 +124,6 @@ public class World : IWorld<Entity>
         storage[entity.id].flag = false;
         freeEntityIds.Enqueue(entity.id);
     }
+
+    public override string ToString() => $"W:{id}";
 }
