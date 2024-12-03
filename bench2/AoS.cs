@@ -2,105 +2,108 @@ using BenchmarkDotNet.Attributes;
 
 namespace bench2;
 
-using AllTypes = (Component1 _1, Component2 _2, Component3 _3, Component4 _4, Component5 _5, Component6 _6, Component7 _7, Component8 _8, Component9 _9, Component10 _10);
-
-public class AoS
+[BenchmarkCategory(nameof(AoS))]
+public class AoS : Benchmark
 {
-    [Params(10_000_000, 100_000_000)] public int Count { get; set; }
+    struct Block {
+        public Component1 c1;
+        public Component2 c2;
+        public Component3 c3;
+        public Component4 c4;
+        public Component5 c5;
+        public Component6 c6;
+        public Component7 c7;
+        public Component8 c8;
+        public Component9 c9;
+        public Component10 c10;
+    }
 
-    private AllTypes[] c;
+    private Block[] data;
 
     [GlobalSetup]
-    public void IterationSetup() => c = new AllTypes[Count];
+    public void GlobalSetup() => data = new Block[Count];
 
     [Benchmark]
     public void Step1()
     {
-        for (var i = 0; i < Count; i++)
-        {
-            ref var v = ref c[i];
-            v._1.Value++;
+        var n = Count;
+        for (var i = 0; i < n; i++) {
+            data[i].c1.Value++;
         }
     }
 
     [Benchmark]
     public void Step2()
     {
-        for (var i = 0; i < Count; i++)
-        {
-            ref var v = ref c[i];
-            v._1.Value++;
-            v._2.Value++;
+        var n = Count;
+        for (var i = 0; i < n; i++) {
+            data[i].c1.Value++;
+            data[i].c2.Value++;
         }
     }
 
     [Benchmark]
     public void Step3()
     {
-        for (int i = 0; i < Count; i++)
-        {
-            ref var v = ref c[i];
-            v._1.Value++;
-            v._2.Value++;
-            v._3.Value++;
+        var n = Count;
+        for (var i = 0; i < n; i++) {
+            data[i].c1.Value++;
+            data[i].c2.Value++;
+            data[i].c3.Value++;
         }
     }
     
     [Benchmark]
     public void Step4()
     {
-        for (int i = 0; i < Count; i++)
-        {
-            ref var v = ref c[i];
-            v._1.Value++;
-            v._2.Value++;
-            v._3.Value++;
-            v._4.Value++;
+        var n = Count;
+        for (var i = 0; i < n; i++) {
+            data[i].c1.Value++;
+            data[i].c2.Value++;
+            data[i].c3.Value++;
+            data[i].c4.Value++;
         }
     }
 
     [Benchmark]
     public void Step5()
     {
-        for (int i = 0; i < Count; i++)
-        {
-            ref var v = ref c[i];
-            v._1.Value++;
-            v._2.Value++;
-            v._3.Value++;
-            v._4.Value++;
-            v._5.Value++;
+        var n = Count;
+        for (var i = 0; i < n; i++) {
+            data[i].c1.Value++;
+            data[i].c2.Value++;
+            data[i].c3.Value++;
+            data[i].c4.Value++;
+            data[i].c5.Value++;
         }
     }
     
     [Benchmark]
     public void Step6()
     {
-        for (int i = 0; i < Count; i++)
-        {
-            ref var v = ref c[i];
-            v._1.Value++;
-            v._2.Value++;
-            v._3.Value++;
-            v._4.Value++;
-            v._5.Value++;
-            v._6.Value++;
+        var n = Count;
+        for (var i = 0; i < n; i++) {
+            data[i].c1.Value++;
+            data[i].c2.Value++;
+            data[i].c3.Value++;
+            data[i].c4.Value++;
+            data[i].c5.Value++;
+            data[i].c6.Value++;
         }
     }
     
     [Benchmark]
     public void Step7()
     {
-        for (int i = 0; i < Count; i++)
-        {
-            ref var v = ref c[i];
-            v._1.Value++;
-            v._2.Value++;
-            v._3.Value++;
-            v._4.Value++;
-            v._5.Value++;
-            v._6.Value++;
-            v._7.Value++;
+        var n = Count;
+        for (var i = 0; i < n; i++) {
+            data[i].c1.Value++;
+            data[i].c2.Value++;
+            data[i].c3.Value++;
+            data[i].c4.Value++;
+            data[i].c5.Value++;
+            data[i].c6.Value++;
+            data[i].c7.Value++;
         }
     }
     
@@ -108,60 +111,57 @@ public class AoS
     [Benchmark]
     public void Step8()
     {
-        for (int i = 0; i < Count; i++)
-        {
-            ref var v = ref c[i];
-            v._1.Value++;
-            v._2.Value++;
-            v._3.Value++;
-            v._4.Value++;
-            v._5.Value++;
-            v._6.Value++;
-            v._7.Value++;
-            v._8.Value++;
+        var n = Count;
+        for (var i = 0; i < n; i++) {
+            data[i].c1.Value++;
+            data[i].c2.Value++;
+            data[i].c3.Value++;
+            data[i].c4.Value++;
+            data[i].c5.Value++;
+            data[i].c6.Value++;
+            data[i].c7.Value++;
+            data[i].c8.Value++;
         }
     }
     
     [Benchmark]
     public void Step9()
     {
-        for (int i = 0; i < Count; i++)
-        {
-            ref var v = ref c[i];
-            v._1.Value++;
-            v._2.Value++;
-            v._3.Value++;
-            v._4.Value++;
-            v._5.Value++;
-            v._6.Value++;
-            v._7.Value++;
-            v._8.Value++;
-            v._9.Value++;
+        var n = Count;
+        for (var i = 0; i < n; i++) {
+            data[i].c1.Value++;
+            data[i].c2.Value++;
+            data[i].c3.Value++;
+            data[i].c4.Value++;
+            data[i].c5.Value++;
+            data[i].c6.Value++;
+            data[i].c7.Value++;
+            data[i].c8.Value++;
+            data[i].c9.Value++;
         }
     }
     
     [Benchmark]
     public void Step10()
     {
-        for (int i = 0; i < Count; i++)
-        {
-            ref var v = ref c[i];
-            v._1.Value++;
-            v._2.Value++;
-            v._3.Value++;
-            v._4.Value++;
-            v._5.Value++;
-            v._6.Value++;
-            v._7.Value++;
-            v._8.Value++;
-            v._9.Value++;
-            v._10.Value++;
+        var n = Count;
+        for (var i = 0; i < n; i++) {
+            data[i].c1.Value++;
+            data[i].c2.Value++;
+            data[i].c3.Value++;
+            data[i].c4.Value++;
+            data[i].c5.Value++;
+            data[i].c6.Value++;
+            data[i].c7.Value++;
+            data[i].c8.Value++;
+            data[i].c9.Value++;
+            data[i].c10.Value++;
         }
     }
 
     [IterationCleanup]
     public void IterationCleanup()
     {
-        Array.Clear(c);
+        Array.Clear(data);
     }
 }

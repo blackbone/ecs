@@ -2,10 +2,9 @@ using BenchmarkDotNet.Attributes;
 
 namespace bench2;
 
-public class SoA
+[BenchmarkCategory(nameof(SoA))]
+public class SoA : Benchmark
 {
-    [Params(10_000_000, 100_000_000)] public int Count { get; set; }
-
     private Component1[] c1;
     private Component2[] c2;
     private Component3[] c3;
@@ -18,7 +17,7 @@ public class SoA
     private Component10[] c10;
 
     [GlobalSetup]
-    public void IterationSetup()
+    public void GlobalSetup()
     {
         c1 = new Component1[Count];
         c2 = new Component2[Count];
@@ -35,7 +34,8 @@ public class SoA
     [Benchmark]
     public void Step1()
     {
-        for (int i = 0; i < Count; i++)
+        var n = Count;
+        for (var i = 0; i < n; i++)
         {
             c1[i].Value++;
         }
@@ -44,7 +44,8 @@ public class SoA
     [Benchmark]
     public void Step2()
     {
-        for (int i = 0; i < Count; i++)
+        var n = Count;
+        for (var i = 0; i < n; i++)
         {
             c1[i].Value++;
             c2[i].Value++;
@@ -54,7 +55,8 @@ public class SoA
     [Benchmark]
     public void Step3()
     {
-        for (int i = 0; i < Count; i++)
+        var n = Count;
+        for (var i = 0; i < n; i++)
         {
             c1[i].Value++;
             c2[i].Value++;
@@ -65,7 +67,8 @@ public class SoA
     [Benchmark]
     public void Step4()
     {
-        for (int i = 0; i < Count; i++)
+        var n = Count;
+        for (var i = 0; i < n; i++)
         {
             c1[i].Value++;
             c2[i].Value++;
@@ -77,7 +80,8 @@ public class SoA
     [Benchmark]
     public void Step5()
     {
-        for (int i = 0; i < Count; i++)
+        var n = Count;
+        for (var i = 0; i < n; i++)
         {
             c1[i].Value++;
             c2[i].Value++;
@@ -90,7 +94,8 @@ public class SoA
     [Benchmark]
     public void Step6()
     {
-        for (int i = 0; i < Count; i++)
+        var n = Count;
+        for (var i = 0; i < n; i++)
         {
             c1[i].Value++;
             c2[i].Value++;
@@ -104,7 +109,8 @@ public class SoA
     [Benchmark]
     public void Step7()
     {
-        for (int i = 0; i < Count; i++)
+        var n = Count;
+        for (var i = 0; i < n; i++)
         {
             c1[i].Value++;
             c2[i].Value++;
@@ -119,7 +125,8 @@ public class SoA
     [Benchmark]
     public void Step8()
     {
-        for (int i = 0; i < Count; i++)
+        var n = Count;
+        for (var i = 0; i < n; i++)
         {
             c1[i].Value++;
             c2[i].Value++;
@@ -135,7 +142,8 @@ public class SoA
     [Benchmark]
     public void Step9()
     {
-        for (int i = 0; i < Count; i++)
+        var n = Count;
+        for (var i = 0; i < n; i++)
         {
             c1[i].Value++;
             c2[i].Value++;
@@ -152,7 +160,8 @@ public class SoA
     [Benchmark]
     public void Step10()
     {
-        for (int i = 0; i < Count; i++)
+        var n = Count;
+        for (var i = 0; i < n; i++)
         {
             c1[i].Value++;
             c2[i].Value++;
