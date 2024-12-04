@@ -4,8 +4,8 @@ using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Running;
 
 var job = Job.Default
-    .WithIterationCount(50)
-    .WithNoAffinitize(true)
+    .WithUnrollFactor(1)
+    .WithIterationCount(10)
     .Apply();
 
 IConfig config = DefaultConfig.Instance
@@ -13,5 +13,5 @@ IConfig config = DefaultConfig.Instance
     .WithOption(ConfigOptions.JoinSummary, true)
     .AddLogicalGroupRules(BenchmarkLogicalGroupRule.ByCategory);
 
-new BenchmarkSwitcher([typeof(SoA), typeof(AoS), typeof(Hybrid)])
+new BenchmarkSwitcher([typeof(AoS), typeof(SoA), typeof(Hybrid)])
     .RunAll(config.AddJob(job));

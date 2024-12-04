@@ -1,0 +1,32 @@
+name: Run parallel benchmarks
+
+on:
+  workflow_dispatch:
+
+jobs:
+  run-bench1:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          submodules: true
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Run Benchmark
+        run: cd ./bench1 && dotnet run
+  run-bench2:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          submodules: true
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Run Benchmark
+        run: cd ./bench2 && dotnet run
