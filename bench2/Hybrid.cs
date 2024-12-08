@@ -7,7 +7,7 @@ namespace bench2;
 [BenchmarkCategory(nameof(Hybrid))]
 public class Hybrid : Benchmark
 {
-    private const int BlockSize = 32;
+    private const int BlockSize = 256;
 
     [StructLayout(LayoutKind.Explicit, Size = Component1.Size * BlockSize * 20)]
     public struct Block {
